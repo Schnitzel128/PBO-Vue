@@ -1,29 +1,25 @@
 # PBO-Vue
+You need [node.js](https://nodejs.org) (min 10.x) and Vue-Cli (`npm install -g @vue/cli`) for development.
 
-## Project setup
+After cloning the repository you need to run the node module installer (be sure to be in the directory).
 ```
 npm install
 ```
 
-### Compiles and hot-reloads for development
+## Start scripts
 ```
-npm run serve
-```
+// Compiles and hot-reloads for development
+> npm run serve
 
-### Compiles and minifies for production
-```
-npm run build
-```
+// Start API Server
+> npm run start
 
-### Run your tests
-```
-npm run test
-```
+// Start and let him serve the vue dist folder
+> npm run startdev
 
-### Lints and fixes files
-```
-npm run lint
-```
+// Compiles and minifies for production
+> npm run build
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+// Lints and fixes files
+> npm run lint
+```
