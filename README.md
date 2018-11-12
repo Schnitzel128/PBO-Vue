@@ -11,11 +11,8 @@ npm install
 // Compiles and hot-reloads for development
 > npm run serve
 
-// Start API Server
+// Start Server
 > npm run start
-
-// Start and let him serve the vue dist folder
-> npm run startdev
 
 // Compiles and minifies for production
 > npm run build
