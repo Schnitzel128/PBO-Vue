@@ -20,12 +20,22 @@ export default {
   name: "Home",
   data() {
     return {
-      helloMessage: "Hello Button"
+      helloMessage: "Click ?"
     };
   },
   methods: {
     buttonClick() {
       alert("clicked");
+      // axios is our way to go for http requests
+      // this will only work, if you build vue (npm run build) and start the web server (npm run start)
+      this.axios
+        .get("/api/user") // route (this will be given by the backend team
+        .then(response => {
+          this.helloMessage = response.data;
+        })
+        .catch(e => {
+          this.helloMessage = e.message;
+        });
     }
   }
 };

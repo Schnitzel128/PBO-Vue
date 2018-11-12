@@ -8,7 +8,7 @@ const bodyParser = require("body-parser");
 // const favicon = require('serve-favicon')
 require("dotenv").config({ path: "./environment/standard.env" });
 
-// include passport
+// include passport ?
 /*
 const passport = require("passport");
 require("./auth/passport")(passport);
