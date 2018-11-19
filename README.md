@@ -1,10 +1,42 @@
 # PBO-Vue
-You need [node.js](https://nodejs.org) (min 10.x) and Vue-Cli (`npm install -g @vue/cli`) for development.
+## Installation
+#### 1. Install required environment
+First of all, you need the following: 
++ PostgreSQL (10.x)
++ [node.js](https://nodejs.org) (min 10.x)
++ Vue-Cli (`npm install -g @vue/cli`) 
++ Knex.js, global installation (`npm install knex -g`)
 
+
+#### 2. Module installation
 After cloning the repository you need to run the node module installer (be sure to be in the directory).
 ```
 npm install
 ```
+
+
+#### 3. Create Database
+Create a new Database (using PostgreSQL commandline)
+```
+create database [databasename];
+```
+
+
+#### 4. Edit Database file
+1. Rename `knexfile.js.edit` to `knexfile.js`
+2. Open the file and update your database/username/password from postgreSQL
+
+
+#### 5. Run migration script
+Now we create the table
+```
+knex migrate:latest
+```
+
+
+#### 6. Ready to go!
+You are good to go now
+
 
 ## Start scripts
 ```
