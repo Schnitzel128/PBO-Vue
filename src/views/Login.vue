@@ -3,14 +3,18 @@
     <div>
       <b-form @submit="onSubmit">
         <b-form-input 
+          id="inputUsername"
           v-model="username"
           type="text"
           placeholder="Username"
+          :state="usernameState"
         />
         <b-form-input 
+          id="inputPassword"
           v-model="password"
           type="password"
           placeholder="Password"
+          :state="passwordState"
         />  
         <b-button 
           id="submitButton" 
@@ -29,13 +33,21 @@ export default {
   data: function() {
     return {
       username: "",
-      password: ""
+      usernameState: null,
+      password: "",
+      passwordState: null
     };
   },
   methods: {
     onSubmit(evt) {
       evt.preventDefault();
-      alert("Username: " + this.username + " Password: " + this.password);
+
+      !this.username
+        ? (this.usernameState = false)
+        : (this.usernameState = true);
+      !this.password
+        ? (this.passwordState = false)
+        : (this.passwordState = true);
     }
   }
 };
@@ -46,6 +58,11 @@ export default {
   margin: 10px;
   padding-left: 20px;
   padding-right: 20px;
+}
+
+#inputUsername,
+#inputPassword {
+  margin-bottom: 5px;
 }
 
 #loginForm {
