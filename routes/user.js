@@ -1,19 +1,22 @@
+// All routes under "/api/users"
 const express = require("express");
 const router = express.Router();
+const userDB = require("../database/userDb");
 
 // const jwt = require("jsonwebtoken");
 
-/* get ?? */
-router.get("/", function(req, res) {
-  res.send("Hello World");
-});
-
-/* post ?? */
-router.post("/", function(req, res) {
-  if (typeof req.body.username !== "undefined") {
-    res.send("Hello " + req.body.username);
-  } else {
-    res.status(400).send("There is no username!");
+// we want to protect this route
+router.get("/", async function(req, res) {
+  try {
+    if (typeof req.query.id !== "undefined") {
+      const userById = await userDB.getUserById(req.query.id); // "/api/users?id=xxx"
+      res.send(userById);
+    } else {
+      const users = await userDB.getUsers();
+      res.send(users);
+    }
+  } catch (e) {
+    res.status(500).send("An error occurred");
   }
 });
 

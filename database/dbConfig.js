@@ -1,4 +1,4 @@
-import knexfile from "../knexfile";
+const knexfile = require("../knexfile");
 
 module.exports = {
   client: "pg",

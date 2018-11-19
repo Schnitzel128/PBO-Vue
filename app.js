@@ -17,6 +17,7 @@ require("./auth/passport")(passport);
 // Database ?
 
 // Routes
+const indexRouter = require("./routes/index");
 const userRouter = require("./routes/user");
 
 // express framework
@@ -35,11 +36,16 @@ app.use(history());
 app.use(express.static(path.join(__dirname, "dist")));
 
 // ROUTES ------------
-// check for API route
+
+// Get API route, so we can quickly change it in the environment
 const apiRoute = process.env.API_ROUTE; // is -> "/api/"
+
+// basic routes
+app.use(apiRoute + "/", indexRouter);
 
 // Routes for user and password
 app.use(apiRoute + "user", userRouter); // -> localhost:port/api/user
+
 // ROUTES END ------------
 
 // catch 404 and forward to error handler
