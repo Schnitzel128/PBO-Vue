@@ -6,7 +6,7 @@ module.exports = {
     connection: {
       database: "vue",
       user: "postgres",
-      password: "somePassword"
+      password: "your_password"
     },
     pool: {
       min: 2,
