@@ -3,6 +3,8 @@ const express = require("express");
 const router = express.Router();
 const userDB = require("../database/userDb");
 
+const jwt = require("jsonwebtoken");
+
 /* easy get example */
 router.get("/", function(req, res) {
   res.send("Hello World");
@@ -18,12 +20,38 @@ router.post("/", function(req, res) {
 });
 
 /* Login Route */
-router.post("/login", function(req, res) {
-  // look if username/password is provided
-  // if yes, look in database for user
-  // compare passwords
-  // if password right -> generate JWT and send it to the user (and maybe username)
-  res.send("login");
+router.post("/login", async function(req, res, next) {
+  if (
+    typeof req.body.username !== "undefined" &&
+    typeof req.body.password !== "undefined"
+  ) {
+    try {
+      // get user by username
+      const user = await userDB.getUserByUsername(req.body.username);
+      if (user.length === 1) {
+        // we found a user with that username, compare password
+        // !!!!!! DO NOT SAVE PLAIN PASSWORD !!!!!!!
+        // insert HASH comparison here!
+        if (user[0].password === req.body.password) {
+          // Password match, create JWT and send it to the user
+          const token = jwt.sign(
+            { id: user[0].id, username: user[0].username },
+            process.env.SECRET
+          );
+          res.send({ username: user[0].username, token: token });
+        } else {
+          res.status(401).send("Wrong password");
+        }
+      } else {
+        res.status(400).send("No user found with that username");
+      }
+    } catch (e) {
+      // something went wrong
+      next(e);
+    }
+  } else {
+    res.status(400).send('Please provide "username" and "password".');
+  }
 });
 
 router.post("/register", async function(req, res, next) {
