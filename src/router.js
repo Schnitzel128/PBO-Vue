@@ -32,10 +32,18 @@ export default new Router({
         import(/* webpackChunkName: "login" */ "./views/Login.vue")
     },
     {
+      path: "/register",
+      name: "register",
+      // route level code-splitting
+      // this generates a separate chunk (about.[register].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () =>
+        import(/* webpackChunkName: "register" */ "./views/Register.vue")
+    },
+    {
       path: "/user",
       name: "user",
-      component: () =>
-        import(/* webpackChunkName: "login" */ "./views/User.vue")
+      component: () => import(/* webpackChunkName: "user" */ "./views/User.vue")
     }
   ]
 });
