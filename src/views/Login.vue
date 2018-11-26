@@ -1,5 +1,13 @@
 <template>
   <b-container id="loginForm">
+    <b-alert
+      variant="danger"
+      :show="showAlert"
+    >{{ error }} @{{ errorDate }}</b-alert>
+    <b-alert
+      variant="success"
+      :show="showSuccess"
+    >{{ successMessage }} </b-alert>
     <div>
       <b-form @submit="onSubmit">
         <b-form-input 
@@ -35,19 +43,49 @@ export default {
       username: "",
       usernameState: null,
       password: "",
-      passwordState: null
+      passwordState: null,
+      error: null,
+      errorDate: null,
+      showAlert: false,
+      successMessage: ""
     };
   },
   methods: {
     onSubmit(evt) {
       evt.preventDefault();
 
-      !this.username
-        ? (this.usernameState = false)
-        : (this.usernameState = true);
-      !this.password
-        ? (this.passwordState = false)
-        : (this.passwordState = true);
+      if (!this.username || !this.password) {
+        this.usernameState = false;
+        this.passwordState = false;
+        return;
+      }
+      this.axios
+        .post("./api/login/", {
+          username: this.username,
+          password: this.password
+        })
+        .then(response => {
+          this.resetTextFields();
+          this.showSuccess = true;
+          this.successMessage = "Login successful.";
+          console.log(response.data);
+        })
+        .catch(e => {
+          this.showAlert = true;
+          this.errorDate = new Date();
+          let errorMessage = e.message;
+          if (typeof e.response.data !== "undefined") {
+            errorMessage = e.response.data;
+          }
+          this.error = errorMessage;
+          this.resetTextFields();
+        });
+    },
+    resetTextFields() {
+      this.username = "";
+      this.password = "";
+      this.usernameState = null;
+      this.passwordState = null;
     }
   }
 };
