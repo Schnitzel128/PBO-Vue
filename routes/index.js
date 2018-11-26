@@ -29,7 +29,7 @@ router.post("/login", async function(req, res, next) {
       // get user by username
       const user = await userDB.getUserByUsername(req.body.username);
       if (user.length === 1) {
-        // we found a user with that username, compare password
+        // check if we got exactly one row/user (more shouldn't be possible due to UNIQUE)
         // !!!!!! DO NOT SAVE PLAIN PASSWORD !!!!!!!
         // insert HASH comparison here!
         if (user[0].password === req.body.password) {
@@ -38,7 +38,7 @@ router.post("/login", async function(req, res, next) {
             { id: user[0].id, username: user[0].username },
             process.env.SECRET
           );
-          res.send({ username: user[0].username, token: token });
+          res.send({ username: user[0].username, token: "JWT " + token });
         } else {
           res.status(401).send("Wrong password");
         }
