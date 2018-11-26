@@ -62,15 +62,9 @@ export default {
   methods: {
     onSubmit(evt) {
       evt.preventDefault();
-      if (!this.username || !this.password1 || !this.password2) {
-        this.usernameState = false;
-        this.passwordState2 = false;
-        this.passwordState1 = false;
-        return;
-      }
-      if (this.password1 !== this.password2) {
-        this.passwordState2 = false;
-        this.passwordState1 = false;
+      this.hideAlerts();
+
+      if (!this.checkTextFields()) {
         return;
       }
       this.axios
@@ -95,6 +89,35 @@ export default {
           this.resetTextFields();
         });
     },
+    checkTextFields() {
+      if (!this.username) {
+        this.usernameState = false;
+        return false;
+      } else {
+        this.usernameState = true;
+      }
+
+      if (!this.password1) {
+        this.passwordState1 = false;
+        return false;
+      } else {
+        this.passwordState1 = true;
+      }
+
+      if (!this.password2) {
+        this.passwordState2 = false;
+        return false;
+      } else {
+        this.passwordState2 = true;
+      }
+
+      if (this.password1 !== this.password2) {
+        this.passwordState1 = false;
+        this.passwordState2 = false;
+        return false;
+      }
+      return true;
+    },
     resetTextFields() {
       this.username = "";
       this.password1 = "";
@@ -102,6 +125,10 @@ export default {
       this.usernameState = null;
       this.passwordState2 = null;
       this.passwordState1 = null;
+    },
+    hideAlerts() {
+      this.showAlert = false;
+      this.showSuccess = false;
     }
   }
 };

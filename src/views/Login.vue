@@ -53,12 +53,12 @@ export default {
   methods: {
     onSubmit(evt) {
       evt.preventDefault();
+      this.hideAlerts();
 
-      if (!this.username || !this.password) {
-        this.usernameState = false;
-        this.passwordState = false;
+      if (!this.checkTextFields()) {
         return;
       }
+
       this.axios
         .post("./api/login/", {
           username: this.username,
@@ -81,11 +81,31 @@ export default {
           this.resetTextFields();
         });
     },
+    checkTextFields() {
+      if (!this.username) {
+        this.usernameState = false;
+        return false;
+      } else {
+        this.usernameState = true;
+      }
+
+      if (!this.password) {
+        this.passwordState = false;
+        return false;
+      } else {
+        this.passwordState = true;
+      }
+      return true;
+    },
     resetTextFields() {
       this.username = "";
       this.password = "";
       this.usernameState = null;
       this.passwordState = null;
+    },
+    hideAlerts() {
+      this.showAlert = false;
+      this.showSuccess = false;
     }
   }
 };
