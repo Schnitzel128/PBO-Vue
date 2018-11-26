@@ -42,13 +42,13 @@ app.use(express.static(path.join(__dirname, "dist")));
 // ROUTES ------------
 
 // Get API route, so we can quickly change it in the environment
-const apiRoute = process.env.API_ROUTE; // is -> "/api/"
+const apiRoute = process.env.API_ROUTE; // is -> "/api"
 
 // basic routes
-app.use(apiRoute + "/", indexRouter);
+app.use(apiRoute + "/", indexRouter); // -> localhost:port/api/
 
 // Routes for user and password
-app.use(apiRoute + "user", userRouter); // -> localhost:port/api/user
+app.use(apiRoute + "/user", userRouter); // -> localhost:port/api/user
 
 // ROUTES END ------------
 

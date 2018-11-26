@@ -1,7 +1,7 @@
 // All routes under "/api/"
 const express = require("express");
 const router = express.Router();
-// const userDB = require("../database/userDb");
+const userDB = require("../database/userDb");
 
 /* easy get example */
 router.get("/", function(req, res) {
@@ -26,10 +26,45 @@ router.post("/login", function(req, res) {
   res.send("login");
 });
 
-router.post("/register", function(req, res) {
+router.post("/register", async function(req, res, next) {
   // look if user provided username, password and password2 (comparison check)
-  // if yes, create user and send a little response back
-  res.send("Register");
+  if (
+    typeof req.body.username !== "undefined" &&
+    typeof req.body.password !== "undefined" &&
+    typeof req.body.password2 !== "undefined"
+  ) {
+    if (req.body.password === req.body.password2) {
+      // try the following, because it can fail if the database operation fails
+      try {
+        // check if user already exists
+        const usersByUsername = await userDB.getUserByUsername(
+          req.body.username
+        );
+        if (usersByUsername.length === 0) {
+          // create user
+          const insertedUser = await userDB.insertUser(
+            req.body.username,
+            req.body.password
+          );
+          // success
+          res.send(
+            'User "' + insertedUser[0].username + '" saved successfully'
+          );
+        } else {
+          res.status(400).send("Username already exists");
+        }
+      } catch (e) {
+        // something went wrong
+        next(e);
+      }
+    } else {
+      res.status(400).send("Passwords does not match");
+    }
+  } else {
+    res
+      .status(400)
+      .send('Please provide "username", "password" and "password2".');
+  }
 });
 
 module.exports = router;
