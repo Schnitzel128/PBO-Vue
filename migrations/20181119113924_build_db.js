@@ -9,7 +9,7 @@ exports.up = function(knex, Promise) {
       .text("username")
       .notNull()
       .unique();
-    table.text("password").notNull();
+    table.binary("password").notNull();
   });
 };
 

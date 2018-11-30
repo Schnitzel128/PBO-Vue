@@ -4,6 +4,8 @@ const router = express.Router();
 const userDB = require("../database/userDb");
 
 const jwt = require("jsonwebtoken");
+// import our helper
+const hash = require("../auth/hash");
 
 /* easy get example */
 router.get("/", function(req, res) {
@@ -32,16 +34,23 @@ router.post("/login", async function(req, res, next) {
         // check if we got exactly one row/user (more shouldn't be possible due to UNIQUE)
         // !!!!!! DO NOT SAVE PLAIN PASSWORD !!!!!!!
         // insert HASH comparison here!
-        if (user[0].password === req.body.password) {
-          // Password match, create JWT and send it to the user
-          const token = jwt.sign(
-            { id: user[0].id, username: user[0].username },
-            process.env.SECRET
+        const validation = await hash.compareHash(
+          req.body.password,
+          user[0].password
+        );
+        if (validation.newHash) {
+          // update password
+          await userDB.updatePasswordById(
+            user.rows[0].user_id,
+            req.body.password
           );
-          res.send({ username: user[0].username, token: "JWT " + token });
-        } else {
-          res.status(401).send("Wrong password");
         }
+        // Password match, create JWT and send it to the user
+        const token = jwt.sign(
+          { id: user[0].id, username: user[0].username },
+          process.env.SECRET
+        );
+        res.send({ username: user[0].username, token: "JWT " + token });
       } else {
         res.status(400).send("No user found with that username");
       }

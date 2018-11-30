@@ -15,10 +15,12 @@ require("./auth/passport")(passport);
 */
 
 // check connection from database
+/*
 const testDb = require("./database/testDb");
 testDb.checkConnection().then(response => {
   console.log("Database connected @ " + response[0].now);
 });
+*/
 
 // Routes
 const indexRouter = require("./routes/index");
