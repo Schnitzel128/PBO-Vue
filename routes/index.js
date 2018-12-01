@@ -32,8 +32,8 @@ router.post("/login", async function(req, res, next) {
       const user = await userDB.getUserByUsername(req.body.username);
       if (user.length === 1) {
         // check if we got exactly one row/user (more shouldn't be possible due to UNIQUE)
-        // !!!!!! DO NOT SAVE PLAIN PASSWORD !!!!!!!
-        // insert HASH comparison here!
+        // !!!!!! DO NOT SAVE PLAIN PASSWORD IN DATABASE!!!!!!!
+        // HASH comparison
         const validation = await hash.compareHash(
           req.body.password,
           user[0].password

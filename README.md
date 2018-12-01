@@ -23,7 +23,7 @@ create database [databasename];
 
 
 #### 4. Edit Database file
-1. Rename `knexfile.js.edit` to `knexfile.js`
+1. Make a copy from `knexfile.js.edit` and name it `knexfile.js`
 2. Open the file and update your database/username/password from postgreSQL
 
 
@@ -32,7 +32,7 @@ Now we create the table
 ```
 knex migrate:latest
 ```
-
+Tip: you can undo/delete the migration with `knex migrate:rollback`
 
 #### 6. Ready to go!
 You are good to go now

@@ -6,8 +6,8 @@ const userDB = require("../database/userDb");
 module.exports = function(passport) {
   // options for JWT
   let opts = {};
-  opts.jwtFromRequest = ExtractJwt.fromAuthHeaderWithScheme("jwt");
-  opts.secretOrKey = process.env.SECRET;
+  opts.jwtFromRequest = ExtractJwt.fromAuthHeaderWithScheme("jwt"); // search in Authorization-header for "jwt..."
+  opts.secretOrKey = process.env.SECRET; // Check signature, we only accept valid tokens!
 
   // let passport use the JWT strategy with our options
   passport.use(
