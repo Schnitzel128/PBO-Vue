@@ -8,7 +8,10 @@
       variant="success"
       :show="showSuccess"
     >{{ successMessage }} </b-alert>
-    <div>
+    <div v-if="isLoggedIn">
+      <b-button @click="logout">Logout</b-button>
+    </div>
+    <div v-if="!isLoggedIn">
       <b-form @submit="onSubmit">
         <b-form-input 
           id="inputUsername"
@@ -24,10 +27,14 @@
           placeholder="Password"
           :state="passwordState"
         />  
-        <b-button 
+        <b-button
+          v-if="!pending"
           id="submitButton" 
           type="submit"
         >Login</b-button>
+        <div v-else>
+          Pending...
+        </div>
       </b-form>
     </div>
   </b-container>
@@ -35,6 +42,9 @@
 
 <script>
 // @ is an alias to /src
+// imports
+import { mapGetters } from "vuex";
+import { mapActions } from "vuex";
 
 export default {
   name: "Login",
@@ -50,7 +60,17 @@ export default {
       successMessage: ""
     };
   },
+  computed: {
+    ...mapGetters({
+      pending: "authentication/pending",
+      isLoggedIn: "authentication/isLoggedIn"
+    })
+  },
   methods: {
+    ...mapActions({
+      login: "authentication/login",
+      logout: "authentication/logout"
+    }),
     onSubmit(evt) {
       evt.preventDefault();
       this.hideAlerts();
@@ -58,7 +78,23 @@ export default {
       if (!this.checkTextFields()) {
         return;
       }
+      const { username, password } = this;
 
+      this.login({ username, password })
+        .then(() => {
+          this.$router.push("/user");
+        })
+        .catch(e => {
+          this.showAlert = true;
+          this.errorDate = new Date();
+          let errorMessage = e.message;
+          if (typeof e.response.data !== "undefined") {
+            errorMessage = e.response.data;
+          }
+          this.error = errorMessage;
+          this.resetTextFields();
+        });
+      /*
       this.axios
         .post("./api/login/", {
           username: this.username,
@@ -80,6 +116,7 @@ export default {
           this.error = errorMessage;
           this.resetTextFields();
         });
+        */
     },
     checkTextFields() {
       if (!this.username) {
