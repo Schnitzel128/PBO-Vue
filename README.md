@@ -1,4 +1,12 @@
 # PBO-Vue
+## Security advise
+Saving an JWT token in local storage is unsave! If you're not using sessions be sure to save it in a cookie with flags like `httpOnly`, `expires` or `maxAge`, `sameSite` and `secure`.
+Read more [here](https://auth0.com/docs/security/store-tokens) (for example).
+
+## Introduction
+This project is for the module "PBO" @HTW-Dresden.
+The goal is, to give the people an example, how the interaction between a self developed backend (node.js) and frontend (vue.js) could work. We implemented a little register and login application.
+
 ## Installation
 #### 1. Install required environment
 First of all, you need the following: 
